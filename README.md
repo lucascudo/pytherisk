@@ -1,5 +1,5 @@
 # pytherisk
-A Python framework for communicating with Asterisk.
+A Python toolset to develop Asterisk AGI scripts.
 
 ## Installing
 ```sh
