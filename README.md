@@ -1,5 +1,5 @@
 # pytherisk
-A Python toolset to develop Asterisk AGI scripts.
+A Python toolset for Asterisk AGI scripts development.
 
 ## Installing
 ```sh
