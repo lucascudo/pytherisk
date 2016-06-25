@@ -6,7 +6,7 @@ A Python framework for communicating with Asterisk.
 pip install gTTS
 ```
 
-##
+## Using
 Just copy pytherisk.py to your AGI script directory and import it. Example:
 ```python
 #!/usr/bin/python
