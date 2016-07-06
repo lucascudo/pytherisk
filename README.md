@@ -14,5 +14,5 @@ Just copy pytherisk.py to your AGI script directory and import it. Example:
 import pytherisk
 
 pytherisk.speak("Olá, você ligou para ACM ltda. Digite o ramal desejado")
-ramal = pytherisk.wait_for_digit(10000) # wait a digit for ten seconds
+ramal = pytherisk.read_digit(10000) # wait a digit for ten seconds
 pytherisk.transfer("SIP", ramal) or pytherisk.busy()
