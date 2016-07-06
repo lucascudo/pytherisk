@@ -12,7 +12,7 @@ from gtts import gTTS
 from datetime import datetime
 
 
-while 1:
+while True:
    line = sys.stdin.readline().strip()
 
    if line == '':
@@ -27,26 +27,6 @@ while 1:
    data = data.strip()
    if key != '':
       env[key] = data
-
-
-def checkresult (params):
-   sys.stderr.write("checkresult: %s\n" % params)
-   params = params.rstrip()
-   if re.search('^200', params):
-      result = re.search('result=(\d+)', params)
-      if (not result):
-         sys.stderr.write("FAIL ('%s')\n" % params)
-         sys.stderr.flush()
-         return -1
-      else:
-         result = result.group(1)
-         sys.stderr.write("PASS (%s)\n" % result)
-         sys.stderr.flush()
-         return result
-   else:
-      sys.stderr.write("FAIL (unexpected result '%s')\n" % params)
-      sys.stderr.flush()
-      return -2
 
 
 def _speak_espeak(text):
@@ -75,6 +55,67 @@ def _speak_gtts(text):
     return file_name
 
 
+def busy(timeout):
+    sys.stdout.write("EXEC Busy %s\n %timeout ")
+    sys.stdout.flush()
+    sys.stderr.write("EXEC Busy %s\n %timeout ")
+    sys.stderr.flush()
+    line = sys.stdin.readline()
+    result = line.strip()
+    return int(checkresult(result)) - 48
+
+
+def checkresult (params):
+   sys.stderr.write("checkresult: %s\n" % params)
+   params = params.rstrip()
+   if re.search('^200', params):
+      result = re.search('result=(\d+)', params)
+      if (not result):
+         sys.stderr.write("FAIL ('%s')\n" % params)
+         sys.stderr.flush()
+         return -1
+      else:
+         result = result.group(1)
+         sys.stderr.write("PASS (%s)\n" % result)
+         sys.stderr.flush()
+         return result
+   else:
+      sys.stderr.write("FAIL (unexpected result '%s')\n" % params)
+      sys.stderr.flush()
+      return -2
+
+
+def hangup():
+    sys.stdout.write("EXEC Hangup")
+    sys.stdout.flush()
+    sys.stderr.write("EXEC Hangup")
+    sys.stderr.flush()
+    line = sys.stdin.readline()
+    result = line.strip()
+    return int(checkresult(result)) - 48
+
+
+def read_digit(timeout):
+    sys.stdout.write("WAIT FOR DIGIT %s\n" %timeout )
+    sys.stdout.flush()
+    sys.stderr.write("WAIT FOR DIGIT %s\n" %timeout )
+    sys.stderr.flush()
+    line = sys.stdin.readline()
+    sys.stderr.write('wait_for_digit line: %s\n' % line)
+    result = line.strip()
+    return int(checkresult(result)) - 48
+
+
+def record(filepath):
+    sys.stdout.write("EXEC MixMonitor " + filepath)
+    sys.stdout.flush()
+    sys.stderr.write("MixMonitor(wav, " + filepath +", mb)\n")
+    sys.stderr.flush()
+    line = sys.stdin.readline()
+    result = line.strip()
+    return int(checkresult(result)) - 48
+
+
 def speak(text):
     try:
         file_name = _speak_gtts(text)
@@ -88,33 +129,12 @@ def speak(text):
     return checkresult(result)
 
 
-def wait_for_digit(timeout):
-    sys.stdout.write("WAIT FOR DIGIT %s\n" %timeout )
-    sys.stdout.flush()
-    sys.stderr.write("WAIT FOR DIGIT %s\n" %timeout )
-    sys.stderr.flush()
-    line = sys.stdin.readline()
-    sys.stderr.write('wait_for_digit line: %s\n' % line)
-    result = line.strip()
-    return int(checkresult(result)) - 48
-
-
 def transfer(tech, dest):
     sys.stdout.write("EXEC DIAL %s/%s\n" % (tech,dest))
     sys.stdout.flush()
     result = sys.stdin.readline().strip()
     checkresult(result)
     monitor()
-
-
-def busy(timeout):
-    sys.stdout.write("EXEC Busy %s\n %timeout ")
-    sys.stdout.flush()
-    sys.stderr.write("EXEC Busy %s\n %timeout ")
-    sys.stderr.flush()
-    line = sys.stdin.readline()
-    result = line.strip()
-    return int(checkresult(result)) - 48
 
 
 def wait_exten(timeout):
@@ -127,10 +147,20 @@ def wait_exten(timeout):
     return int(checkresult(result)) - 48
 
 
-def record(filepath):
-    sys.stdout.write("EXEC MixMonitor " + filepath)
-    sys.stdout.flush()
-    sys.stderr.write("MixMonitor(wav, " + filepath +", mb)\n")
+def write_digit(digit, timeout, duration):
+    if timeout is None and duration is None:
+        sys.stdout.write("EXEC SendDTMF %s\n" % digit )
+        sys.stdout.flush()
+    elif duration is None:
+        sys.stdout.write("EXEC SendDTMF %s/%s\n" % (digit, timeout) )
+        sys.stdout.flush()
+    elif timeout is None:
+        sys.stdout.write("EXEC SendDTMF %s/%s\n" % (digit, duration) )
+        sys.stdout.flush()
+    else:
+        sys.stdout.write("EXEC SendDTMF %s %s %s\n" % (digit, timeout, duration) )
+        sys.stdout.flush()
+    sys.stderr.write("EXEC SendDTMF %s/%s\n" % (digit, duration))
     sys.stderr.flush()
     line = sys.stdin.readline()
     result = line.strip()
