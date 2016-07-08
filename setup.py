@@ -8,10 +8,8 @@ except IOError:
 setup(
 	name='pytherisk',
 	version='0.3',
-    url='https://github.com/lucascudo/pytherisk.git',
+    	url='https://github.com/lucascudo/pytherisk.git',
 	scripts=['pytherisk.py'],
-    keywords=["asterisk", "AMI", "AGI", "voice", "google", "speak"],
-    install_requires=[
-        "gTTS"
-    ]
+	install_requires=["gTTS"],
+    	keywords=["asterisk", "AMI", "AGI", "voice", "google", "speak"]
 )
