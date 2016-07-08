@@ -3,11 +3,11 @@ A Python toolset for Asterisk AGI scripts development.
 
 ## Installing
 ```sh
-pip install gTTS
+pip install pytherisk
 ```
 
 ## Using
-Just copy pytherisk.py to your AGI script directory and import it. Example:
+Just import pytherisk in your your Python AGI script. Example:
 ```python
 #!/usr/bin/python
 
