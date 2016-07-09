@@ -7,7 +7,7 @@ pip install pytherisk
 ```
 
 ## Using
-Just import pytherisk in your your Python AGI script. Example:
+Just import and use pytherisk in your your Python AGI script. Example:
 ```python
 #!/usr/bin/python
 
