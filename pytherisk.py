@@ -1,16 +1,14 @@
 #!/usr/bin/python
 # coding=utf-8
 
-
-import re
+import hashlib
 import os
+import re
+import subprocess
 import sys
 import tempfile
-import subprocess
-import hashlib
-from gtts import gTTS
 from datetime import datetime
-
+from gtts import gTTS
 
 while True:
    line = sys.stdin.readline().strip()
