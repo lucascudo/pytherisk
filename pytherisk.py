@@ -10,23 +10,6 @@ import tempfile
 from datetime import datetime
 from gtts import gTTS
 
-while True:
-   line = sys.stdin.readline().strip()
-
-   if line == '':
-      break
-   key, data = line.split(':')
-   if key[:4] != 'agi_':
-      #skip input that doesn't begin with agi_
-      sys.stderr.write("Did not work!\n")
-      sys.stderr.flush()
-      continue
-   key = key.strip()
-   data = data.strip()
-   if key != '':
-      env[key] = data
-
-
 def _speak_espeak(text):
     base_file_name = tempfile.named_temporary_file().name
     raw_file_name = tempfile.named_temporary_file().name + '-raw.wav'
